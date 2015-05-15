@@ -58,6 +58,9 @@ public class Console implements Disposable {
 		/** Prints in green. Use to print success notifications of events. Intentional Use: Print successful execution of console
 		 * commands (if needed). */
 		SUCCESS(new Color(0, 217f / 255f, 0, 1), "Success! "),
+		
+		
+		INFO(Color.CYAN, ""),
 		/** Prints in white with {@literal "> "} prepended to the command. Has that prepended text as the indicator in the log file.
 		 * Intentional Use: To be used by the console, alone. */
 		COMMAND(new Color(1, 1, 1, 1), "> ");
@@ -151,7 +154,7 @@ public class Console implements Disposable {
 		consoleWindow.setResizable(true);
 		consoleWindow.setKeepWithinStage(true);
 		consoleWindow.addActor(display);
-		consoleWindow.setTouchable(Touchable.disabled);
+		//consoleWindow.setTouchable(Touchable.disabled);
 
 		stage.addActor(consoleWindow);
 		stage.setKeyboardFocus(display);
@@ -579,7 +582,7 @@ public class Console implements Disposable {
 					consoleWindow.setTouchable(Touchable.disabled);
 				} else {
 					stage.setKeyboardFocus(input);
-					consoleWindow.setTouchable(Touchable.childrenOnly);
+					consoleWindow.setTouchable(Touchable.enabled);
 				}
 				return true;
 			}
