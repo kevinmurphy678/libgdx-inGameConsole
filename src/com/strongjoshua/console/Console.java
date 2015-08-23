@@ -99,6 +99,7 @@ public class Console implements Disposable {
 	private CommandCompleter commandCompleter;
 	private Window consoleWindow;
 	private Boolean logToSystem;
+	private Boolean headless=false;
 
 	/** Creates the console using the default skin.<br>
 	 * <b>***IMPORTANT***</b> Call {@link Console#dispose()} to make your {@link InputProcessor} the default processor again (this
@@ -115,6 +116,14 @@ public class Console implements Disposable {
 	 * @see Console#dispose() */
 	public Console (Skin skin) {
 		this(skin, true);
+	}
+	
+	public Console (Boolean headless, Boolean logToSystem) {
+		if(headless)
+		{
+			this.headless=true;
+			this.logToSystem=logToSystem;
+		}
 	}
 
 	/** Creates the console.<br>
@@ -304,12 +313,18 @@ public class Console implements Disposable {
 	 * @param level The {@link LogLevel} of the log entry.
 	 * @see LogLevel */
 	public void log (String msg, LogLevel level) {
-		log.addEntry(msg, level);
-		display.refresh();
+		if(!headless)
+		{
+			log.addEntry(msg, level);
+			display.refresh();
+		
+		}
 
 		if (logToSystem) {
 			System.out.println(msg);
 		}
+		
+		
 	}
 
 	/** Logs a new entry to the console using {@link LogLevel#DEFAULT}.
