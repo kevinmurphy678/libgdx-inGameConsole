@@ -93,7 +93,7 @@ public class Console implements Disposable {
 	private boolean usesMultiplexer = false;
 	private InputProcessor appInput;
 	private InputMultiplexer multiplexer;
-	private Stage stage;
+	public Stage stage;
 	private CommandExecutor exec;
 	private CommandHistory commandHistory;
 	private CommandCompleter commandCompleter;
@@ -395,8 +395,8 @@ public class Console implements Disposable {
 		exec.setConsole(this);
 	}
 
-	private void execCommand (String command) {
-		log(command, LogLevel.COMMAND);
+	public void execCommand (String command) {
+		if(!headless)log(command, LogLevel.COMMAND);
 
 		String[] parts = command.split(" ");
 		String methodName = parts[0];
