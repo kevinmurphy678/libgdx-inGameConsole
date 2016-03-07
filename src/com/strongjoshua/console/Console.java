@@ -85,7 +85,7 @@ public class Console implements Disposable {
 	/** Use to set the amount of entries to be stored to unlimited. */
 	public static final int UNLIMITED_ENTRIES = -1;
 
-	private int keyID = Input.Keys.GRAVE;
+	private int keyID = Input.Keys.F1;
 	private boolean disabled;
 	private Log log;
 	private ConsoleDisplay display;
@@ -595,9 +595,11 @@ public class Console implements Disposable {
 					input.setText("");
 					stage.setKeyboardFocus(display);
 					consoleWindow.setTouchable(Touchable.disabled);
+					
 				} else {
 					stage.setKeyboardFocus(input);
 					consoleWindow.setTouchable(Touchable.enabled);
+					
 				}
 				return true;
 			}
