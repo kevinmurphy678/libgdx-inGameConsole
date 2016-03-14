@@ -13,6 +13,11 @@
 
 package com.strongjoshua.console;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -60,10 +65,13 @@ public class Console implements Disposable {
 		SUCCESS(new Color(0, 217f / 255f, 0, 1), "Success! "),
 		
 		
-		INFO(Color.CYAN, ""),
+		INFO(Color.ORANGE, "INFO: "),
 		/** Prints in white with {@literal "> "} prepended to the command. Has that prepended text as the indicator in the log file.
 		 * Intentional Use: To be used by the console, alone. */
-		COMMAND(new Color(1, 1, 1, 1), "> ");
+		COMMAND(new Color(1, 1, 1, 1), "> "),
+		
+		DEVELOPER(new Color(1, 0, 0, 1), "<developer>"),
+		TESTER(new Color(1, 1, 0, 1), "<tester>");
 
 		private Color color;
 		private String identifier;
@@ -73,7 +81,7 @@ public class Console implements Disposable {
 			identifier = identity;
 		}
 
-		Color getColor () {
+		public Color getColor () {
 			return color;
 		}
 
@@ -397,14 +405,25 @@ public class Console implements Disposable {
 
 	public void execCommand (String command) {
 		if(!headless)log(command, LogLevel.COMMAND);
+		
+		
+		List<String> list = new ArrayList<String>();
+		Matcher m2 = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(command);
+		while (m2.find())
+		    list.add(m2.group(1).replace("\"", "")); // Add  to remove surrounding quotes.
 
-		String[] parts = command.split(" ");
+		
+		System.out.println(list);
+
+		
+		String[] parts = list.toArray(new String[0]);
 		String methodName = parts[0];
 		String[] sArgs = null;
 		if (parts.length > 1) {
 			sArgs = new String[parts.length - 1];
 			for (int i = 1; i < parts.length; i++) {
 				sArgs[i - 1] = parts[i];
+				
 			}
 		}
 
@@ -414,6 +433,9 @@ public class Console implements Disposable {
 			args = new Object[sArgs.length];
 			for (int i = 0; i < sArgs.length; i++) {
 				String s = sArgs[i];
+
+				
+				
 				try {
 					int j = Integer.parseInt(s);
 					args[i] = j;
@@ -476,13 +498,13 @@ public class Console implements Disposable {
 		return stage.hit(stageCoords.x, stageCoords.y, true) != null;
 	}
 
-	private class ConsoleDisplay extends Table {
+	public class ConsoleDisplay extends Table {
 		private Table logEntries;
 		private TextField input;
 		private Skin skin;
 		private Array<Label> labels;
 
-		protected ConsoleDisplay (Skin skin) {
+		public ConsoleDisplay (Skin skin) {
 			super(skin);
 
 			this.setFillParent(false);
@@ -557,11 +579,11 @@ public class Console implements Disposable {
 			if (disabled) return false;
 
 			// reset command completer because input string may have changed
-			if (keycode != Keys.TAB) {
+			if (keycode != Keys.TAB&& !hidden) {
 				commandCompleter.reset();
 			}
 
-			if (keycode == Keys.ENTER) {
+			if (keycode == Keys.ENTER&& !hidden) {
 				String s = input.getText();
 				if (s.length() == 0 || s.equals("") || s.split(" ").length == 0) return false;
 				if (exec != null) {
@@ -572,15 +594,15 @@ public class Console implements Disposable {
 						LogLevel.ERROR);
 				input.setText("");
 				return true;
-			} else if (keycode == Keys.UP) {
+			} else if (keycode == Keys.UP&& !hidden) {
 				input.setText(commandHistory.getPreviousCommand());
 				input.setCursorPosition(input.getText().length());
 				return true;
-			} else if (keycode == Keys.DOWN) {
+			} else if (keycode == Keys.DOWN&& !hidden) {
 				input.setText(commandHistory.getNextCommand());
 				input.setCursorPosition(input.getText().length());
 				return true;
-			} else if (keycode == Keys.TAB) {
+			} else if (keycode == Keys.TAB&& !hidden) {
 				String s = input.getText();
 				if (s.length() == 0) return false;
 				if (commandCompleter.isNew()) {

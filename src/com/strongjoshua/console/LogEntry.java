@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.strongjoshua.console.Console.LogLevel;
 
-class LogEntry {
+public class LogEntry {
 	private String text;
 	private LogLevel level;
 	private long timeStamp;
@@ -32,10 +32,15 @@ class LogEntry {
 		return level.getColor();
 	}
 	
-	protected String toConsoleString() {
+	public String getText()
+	{
+		return text;
+	}
+	
+	public String toConsoleString() {
 		String r = "";
-		if(level.equals(LogLevel.COMMAND))
-			r += level.getIdentifier();
+		//if(level.equals(LogLevel.COMMAND))
+		r += level.getIdentifier();
 		r += text;
 		return r;
 	}
