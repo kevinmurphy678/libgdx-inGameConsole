@@ -71,7 +71,8 @@ public class Console implements Disposable {
 		COMMAND(new Color(1, 1, 1, 1), "> "),
 		
 		DEVELOPER(new Color(1, 0, 0, 1), "<developer>"),
-		TESTER(new Color(1, 1, 0, 1), "<tester>");
+		TESTER(new Color(1, 1, 0, 1), "<tester>"),
+		DEVELOPER_LEAD(Color.MAROON, "<lead-developer>");
 
 		private Color color;
 		private String identifier;
@@ -410,7 +411,9 @@ public class Console implements Disposable {
 		List<String> list = new ArrayList<String>();
 		Matcher m2 = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(command);
 		while (m2.find())
-		    list.add(m2.group(1).replace("\"", "")); // Add  to remove surrounding quotes.
+		{
+		    list.add(m2.group(1).replace("\"", ""));
+		}
 
 		
 		System.out.println(list);
